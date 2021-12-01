@@ -13,6 +13,10 @@ const body = (theme) => `
     font-size: ${theme.fontSizes.body};
 `;
 
+const small = (theme) => `
+    font-size: 12px;
+`;
+
 const hint = (theme) => `
     font-size: ${theme.fontSizes.body};
 `;
@@ -32,12 +36,20 @@ const label = (theme) => `
     font-weight: ${theme.fontWeights.medium};
 `;
 
+const logo = (theme) => `
+font-family: ${theme.fonts.logo};
+    font-size: ${theme.fontSizes.body};
+    font-weight: ${theme.fontWeights.medium};
+`;
+
 const variants = {
   body,
   label,
   caption,
   error,
   hint,
+  logo,
+  small,
 };
 
 export const Text = styled.Text`

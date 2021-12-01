@@ -1,10 +1,23 @@
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import { List } from "react-native-paper";
-
+import styled from "styled-components/native";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 
 import { SafeArea } from "../../../components/utility/safe-area.component";
+import {
+  RatingPill,
+  RatingPill2,
+  ReviewByContainer,
+  ReviewListItem,
+} from "../components/restaurant-info-card.styles";
+import { Text } from "../../../components/typography/text.component";
+import { Spacer } from "../../../components/spacer/spacer.component";
+import {
+  ProfileNameListItem,
+  UserListItem,
+} from "../../social/components/user-profile.styles";
+import { FlatList } from "react-native-gesture-handler";
 
 export const RestaurantDetailScreen = ({ route }) => {
   const [breakfastExpanded, setBreakfastExpanded] = useState(false);
@@ -12,56 +25,104 @@ export const RestaurantDetailScreen = ({ route }) => {
   const [dinnerExpanded, setDinnerExpanded] = useState(false);
   const [drinksExpanded, setDrinksExpanded] = useState(false);
 
+  const users = [
+    {
+      username: "thso12",
+      _id: "123",
+    },
+    {
+      username: "thso123",
+      _id: "124",
+    },
+  ];
+
   const { restaurant } = route.params;
   return (
     <SafeArea>
       <RestaurantInfoCard restaurant={restaurant} />
-      <ScrollView>
-        <List.Accordion
-          title="Breakfast"
-          left={(props) => <List.Icon {...props} icon="bread-slice" />}
-          expanded={breakfastExpanded}
-          onPress={() => setBreakfastExpanded(!breakfastExpanded)}
-        >
-          <List.Item title="Eggs Benedict" />
-          <List.Item title="Classic Breakfast" />
-        </List.Accordion>
+      {/* <ScrollView>
+        <ReviewByContainer>
+          <Text variant="label">Rated </Text>
+          <RatingPill>
+            <Text>Meh</Text>
+          </RatingPill>
+          <Spacer position="right" size="medium">
+            <Text variant="label">by </Text>
+          </Spacer>
+          <Image
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 200,
+              borderWidth: 2,
+              //borderColor: colors.brand.primary,
+            }}
+            source={{
+              uri: "https://picsum.photos/200",
+            }}
+          />
 
-        <List.Accordion
-          title="Lunch"
-          left={(props) => <List.Icon {...props} icon="hamburger" />}
-          expanded={lunchExpanded}
-          onPress={() => setLunchExpanded(!lunchExpanded)}
-        >
-          <List.Item title="Burger w/ Fries" />
-          <List.Item title="Steak Sandwich" />
-          <List.Item title="Mushroom Soup" />
-        </List.Accordion>
+          <ProfileNameListItem>thso12</ProfileNameListItem>
+        </ReviewByContainer>
+      </ScrollView> */}
+      <FlatList
+        data={users}
+        renderItem={({ item }) => {
+          return (
+            <ReviewListItem>
+              <Text variant="label">Rated </Text>
+              <RatingPill>
+                <Text>Meh</Text>
+              </RatingPill>
+              <Spacer position="right" size="medium">
+                <Text variant="label">by </Text>
+              </Spacer>
 
-        <List.Accordion
-          title="Dinner"
-          left={(props) => <List.Icon {...props} icon="food-variant" />}
-          expanded={dinnerExpanded}
-          onPress={() => setDinnerExpanded(!dinnerExpanded)}
-        >
-          <List.Item title="Spaghetti Bolognese" />
-          <List.Item title="Veal Cutlet with Chicken Mushroom Rotini" />
-          <List.Item title="Steak Frites" />
-        </List.Accordion>
+              <Image
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 200,
+                  borderWidth: 2,
+                  //borderColor: colors.brand.primary,
+                }}
+                source={{
+                  uri: "https://picsum.photos/200",
+                }}
+              />
 
-        <List.Accordion
-          title="Drinks"
-          left={(props) => <List.Icon {...props} icon="cup" />}
-          expanded={drinksExpanded}
-          onPress={() => setDrinksExpanded(!drinksExpanded)}
-        >
-          <List.Item title="Coffee" />
-          <List.Item title="Tea" />
-          <List.Item title="Modelo" />
-          <List.Item title="Coke" />
-          <List.Item title="Fanta" />
-        </List.Accordion>
-      </ScrollView>
+              <ProfileNameListItem>{item.username}</ProfileNameListItem>
+            </ReviewListItem>
+          );
+        }}
+        keyExtractor={(item) => item._id}
+      />
+      <View style={{ bottom: 252 }}>
+        <ReviewListItem>
+          <Text variant="label">Rated </Text>
+          <RatingPill2>
+            <Text>Awesome</Text>
+          </RatingPill2>
+          <Spacer position="right" size="medium">
+            <Text variant="label">by </Text>
+          </Spacer>
+
+          <Image
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 200,
+              borderWidth: 2,
+              //borderColor: colors.brand.primary,
+            }}
+            source={{
+              uri: "https://picsum.photos/200",
+            }}
+          />
+
+          <ProfileNameListItem>huong22</ProfileNameListItem>
+        </ReviewListItem>
+      </View>
     </SafeArea>
   );
 };

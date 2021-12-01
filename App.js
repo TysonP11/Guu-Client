@@ -8,6 +8,10 @@ import {
   Oswald_400Regular,
 } from "@expo-google-fonts/oswald";
 import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
+import {
+  useFonts as useRighteous,
+  Righteous_400Regular,
+} from "@expo-google-fonts/righteous";
 
 import { theme } from "./src/infrastructure/theme";
 import { Navigation } from "./src/infrastructure/navigation";
@@ -16,6 +20,7 @@ import { RestaurantsContextProvider } from "./src/services/restaurants/restauran
 import { LocationContextProvider } from "./src/services/location/location.context";
 import { FavouritesContextProvider } from "./src/services/favourites/favourites.context";
 import { AuthenticationContextProvider } from "./src/services/authentication/authentication.context";
+import { ProfileContextProvider } from "./src/services/profile/user-profile.context";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBmKwzXIQ_7iufDh4U6GyU_4Wc-hyDEnf8",
@@ -39,7 +44,11 @@ export default function App() {
     Lato_400Regular,
   });
 
-  if (!oswaldLoaded || !latoLoaded) {
+  const [righteousLoaded] = useRighteous({
+    Righteous_400Regular,
+  });
+
+  if (!oswaldLoaded || !latoLoaded || !righteousLoaded) {
     return null;
   }
 
@@ -47,13 +56,15 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <AuthenticationContextProvider>
-          <FavouritesContextProvider>
-            <LocationContextProvider>
-              <RestaurantsContextProvider>
-                <Navigation />
-              </RestaurantsContextProvider>
-            </LocationContextProvider>
-          </FavouritesContextProvider>
+          <ProfileContextProvider>
+            <FavouritesContextProvider>
+              <LocationContextProvider>
+                <RestaurantsContextProvider>
+                  <Navigation />
+                </RestaurantsContextProvider>
+              </LocationContextProvider>
+            </FavouritesContextProvider>
+          </ProfileContextProvider>
         </AuthenticationContextProvider>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />

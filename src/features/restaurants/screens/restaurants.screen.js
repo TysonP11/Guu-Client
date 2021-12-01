@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList, TouchableOpacity, Image, View } from "react-native";
 import styled from "styled-components/native";
 import { ActivityIndicator, Colors } from "react-native-paper";
 
@@ -10,8 +10,26 @@ import { FavouritesBar } from "../../../components/favourites/favourites-bar.com
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
 
+import { Text } from "../../../components/typography/text.component";
 import { Search } from "../components/search.component";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
+import {
+  SingleCardView,
+  ReviewByContainer,
+  RatingPill,
+  RatingButtonContainer,
+  RatingButton,
+  RatingButtonSmall,
+  RatingButton2,
+  RatingButtonSmall2,
+  OtherOptions,
+  OtherOptionsContainer,
+} from "../components/restaurant-info-card.styles";
+import {
+  ProfileNameListItem,
+  TagPill,
+  UserListItem,
+} from "../../social/components/user-profile.styles";
 
 const RestaurantList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -45,7 +63,10 @@ export const RestaurantsScreen = ({ navigation }) => {
         onFavouritesToggle={() => setIsToggled(!isToggled)}
       />
       {isToggled && (
-        <FavouritesBar favourites={favourites} onNavigate={navigation.navigate} />
+        <FavouritesBar
+          favourites={favourites}
+          onNavigate={navigation.navigate}
+        />
       )}
       <RestaurantList
         data={restaurants}
@@ -66,6 +87,64 @@ export const RestaurantsScreen = ({ navigation }) => {
         }}
         keyExtractor={(item) => item.name}
       />
+
+      {/* <ReviewByContainer>
+        <Text variant="label">Rated </Text>
+        <RatingPill>
+          <Text>Meh</Text>
+        </RatingPill>
+        <Spacer position="right" size="medium">
+          <Text variant="label">by </Text>
+        </Spacer>
+        <Image
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 200,
+            borderWidth: 2,
+            //borderColor: colors.brand.primary,
+          }}
+          source={{
+            uri: "https://picsum.photos/200",
+          }}
+        />
+
+        <ProfileNameListItem>thso12</ProfileNameListItem>
+      </ReviewByContainer>
+      <SingleCardView>
+        <Spacer position="bottom" size="large">
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("RestaurantDetail", {
+                restaurant: restaurants[1],
+              })
+            }
+          >
+            <Spacer position="bottom" size="large">
+              <RestaurantInfoCard restaurant={restaurants[1]} />
+            </Spacer>
+          </TouchableOpacity>
+        </Spacer>
+      </SingleCardView>
+      <RatingButtonContainer>
+        <RatingButtonSmall>
+          <Text>Awful</Text>
+        </RatingButtonSmall>
+        <RatingButton>
+          <Text>Meh</Text>
+        </RatingButton>
+        <RatingButton2>
+          <Text>Good</Text>
+        </RatingButton2>
+        <RatingButtonSmall2>
+          <Text variant="small">Awesome</Text>
+        </RatingButtonSmall2>
+      </RatingButtonContainer>
+      <OtherOptionsContainer>
+        <OtherOptions>
+          <Text>Not Interested</Text>
+        </OtherOptions>
+      </OtherOptionsContainer> */}
     </SafeArea>
   );
 };
