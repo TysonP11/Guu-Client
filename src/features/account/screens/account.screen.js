@@ -1,5 +1,5 @@
 import React from "react";
-
+import { SafeArea } from "../../../components/utility/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import {
   AccountBackground,
@@ -11,9 +11,8 @@ import {
 
 export const AccountScreen = ({ navigation }) => {
   return (
-    <AccountBackground>
+    <SafeArea>
       <AccountCover />
-      <Title>Meals To Go</Title>
       <AccountContainer>
         <AuthButton
           icon="lock-open-outline"
@@ -32,6 +31,6 @@ export const AccountScreen = ({ navigation }) => {
           </AuthButton>
         </Spacer>
       </AccountContainer>
-    </AccountBackground>
+    </SafeArea>
   );
 };
