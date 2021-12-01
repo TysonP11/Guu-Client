@@ -11,9 +11,11 @@ const SearchContainer = styled.View`
 export const Search = ({ isFavouritesToggled, onFavouritesToggle }) => {
   const { keyword, search } = useContext(LocationContext);
   const [searchKeyword, setSearchKeyword] = useState(keyword);
+
   useEffect(() => {
     setSearchKeyword(keyword);
   }, [keyword]);
+
   return (
     <SearchContainer>
       <Searchbar
@@ -22,7 +24,7 @@ export const Search = ({ isFavouritesToggled, onFavouritesToggle }) => {
         placeholder="Search for a location"
         value={searchKeyword}
         onSubmitEditing={() => {
-          search(searchKeyword);
+          search(searchKeyword); 
         }}
         onChangeText={(text) => {
           setSearchKeyword(text);

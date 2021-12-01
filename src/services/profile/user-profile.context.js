@@ -102,12 +102,16 @@ export const ProfileContextProvider = ({ children }) => {
   };
 
   const getAverageRating = () => {
+    if(reviews.length === 0) {
+      setAverageRating(0.0)
+    }else{
     var sum = 0.0;
     reviews.map((review) => {
       sum += parseFloat(review.rating.$numberDecimal);
       console.log(review.rating.$numberDecimal);
     });
     setAverageRating((sum / reviews.length).toFixed(2));
+  }
     console.log(averageRating);
   };
 

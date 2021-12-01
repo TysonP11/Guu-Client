@@ -1,13 +1,19 @@
 import { mocks, mockImages } from "./mock";
 import camelize from "camelize";
+import axios from "../../utils/axios";
 
-export const restaurantsRequest = (location) => {
+export const restaurantsRequest = (term) => {
+  
   return new Promise((resolve, reject) => {
-    const mock = mocks[location];
-    if (!mock) {
-      reject("not found");
-    }
-    resolve(mock);
+    const body = { term }
+    axios
+      .post(`/review/search-reviews`, body)
+      .then((res) => {
+        resolve(res.data)
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 

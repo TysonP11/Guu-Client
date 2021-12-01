@@ -31,8 +31,6 @@ export const UserProfileTop = ({
 }) => {
   const ratingArray = Array.from(new Array(Math.floor(averageRating)));
 
-  console.log(followers);
-
   return (
     <ProfileTop>
       <UserProfileHeader user={user} />
@@ -62,8 +60,8 @@ export const UserProfileTop = ({
           </ReviewsInfo>
 
           <TagsContainer>
-            {tags.map((t) => (
-              <TagPill key={t}>
+            {tags.map((t, i) => (
+              <TagPill key={i}>
                 <Text>{t}</Text>
               </TagPill>
             ))}

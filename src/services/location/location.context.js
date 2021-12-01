@@ -56,24 +56,8 @@ export const LocationContextProvider = ({ children }) => {
 
   useEffect(() => {
     getLocation();
+    onSearch('')
   }, []);
-
-  useEffect(() => {
-    if (!keyword.length) {
-      // don't do anything
-      return;
-    }
-    locationRequest(keyword.toLowerCase())
-      .then(locationTransform)
-      .then((result) => {
-        setIsLoading(false);
-        setLocation(result);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err);
-      });
-  }, [keyword]);
 
   return (
     <LocationContext.Provider
