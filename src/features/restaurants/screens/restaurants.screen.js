@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { FlatList, TouchableOpacity, Image, View } from "react-native";
 import styled from "styled-components/native";
 import { ActivityIndicator, Colors } from "react-native-paper";
@@ -46,11 +46,21 @@ const LoadingContainer = styled.View`
   left: 50%;
 `;
 
+const ratingTexts = [
+  'Awful', 'Meh', 'Good', 'Awesome', "Awesome"
+]
+
 export const RestaurantsScreen = ({ navigation }) => {
-  const { isLoading, restaurants } = useContext(RestaurantsContext);
+  const { isLoading, restaurants, reviews } = useContext(RestaurantsContext);
   const { favourites } = useContext(FavouritesContext);
   const [isToggled, setIsToggled] = useState(false);
 
+  useEffect(() => {
+    if(reviews && reviews.reviews && reviews.reviews.length > 0 ){
+      console.log(Math.floor(reviews.reviews[0].rating.$numberDecimal));
+      }
+  },[reviews])
+  
   return (
     <SafeArea>
       {isLoading && (
@@ -62,7 +72,7 @@ export const RestaurantsScreen = ({ navigation }) => {
         isFavouritesToggled={isToggled}
         onFavouritesToggle={() => setIsToggled(!isToggled)}
       />
-      {isToggled && (
+      {/* {isToggled && (
         <FavouritesBar
           favourites={favourites}
           onNavigate={navigation.navigate}
@@ -86,12 +96,15 @@ export const RestaurantsScreen = ({ navigation }) => {
           );
         }}
         keyExtractor={(item) => item.name}
-      />
+      /> */}
 
-      {/* <ReviewByContainer>
+      <ReviewByContainer>
         <Text variant="label">Rated </Text>
         <RatingPill>
-          <Text>Meh</Text>
+          {reviews && reviews.reviews && reviews.reviews.length > 0 && (
+            <Text>{ratingTexts[Math.floor(reviews.reviews[0].rating.$numberDecimal)]}</Text>
+          )}
+          
         </RatingPill>
         <Spacer position="right" size="medium">
           <Text variant="label">by </Text>
@@ -144,7 +157,7 @@ export const RestaurantsScreen = ({ navigation }) => {
         <OtherOptions>
           <Text>Not Interested</Text>
         </OtherOptions>
-      </OtherOptionsContainer> */}
+      </OtherOptionsContainer>
     </SafeArea>
   );
 };
