@@ -38,16 +38,13 @@ export const ProfileContextProvider = ({ children }) => {
   const closeMenu = () => setVisible(false);
 
   const getFollowers = (userId) => {
-    //console.log("useEffect" + userId);
     setIsLoading(true);
     getFollowersRequest(userId.toString())
       .then((f) => {
-        //console.log("getting followers: " + JSON.stringify(f));
         setFollowers(f);
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log(e.response.data.error);
         setIsLoading(false);
         setError(e.response.data.error);
       });
@@ -68,36 +65,30 @@ export const ProfileContextProvider = ({ children }) => {
       }
     });
     setViewOptions(newViewOptions);
-    console.log(viewOptions);
   };
 
   const getFollowings = (userId) => {
     setIsLoading(true);
     getFollowingsRequest(userId.toString())
       .then((f) => {
-        //console.log("getting followings: " + JSON.stringify(f));
         setFollowing(f);
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log(e.response.data.error);
         setIsLoading(false);
         setError(e.response.data.error);
       });
   };
 
   const getReviews = (userId) => {
-    console.log(userId);
     setIsLoading(true);
     getReviewsRequest(userId.toString())
       .then((r) => {
-        console.log("getting reviews: " + JSON.stringify(r));
         setReviews(r.reviews);
         //getAverageRating();
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log(e.response.data.error);
         setIsLoading(false);
         setError(e.response.data.error);
       });
@@ -110,25 +101,21 @@ export const ProfileContextProvider = ({ children }) => {
       var sum = 0.0;
       reviews.map((review) => {
         sum += parseFloat(review.rating.$numberDecimal);
-        console.log(review.rating.$numberDecimal);
       });
       setAverageRating((sum / reviews.length).toFixed(2));
     }
-    console.log(averageRating);
   };
 
   const getTags = () => {
     var tagsArray = [];
     reviews.map((review) => {
       tagsArray = tagsArray.concat(review.tags);
-      //console.log(review.tags);
     });
     setTags(tagsArray);
   };
 
   useEffect(() => {
     if (user) {
-      //console.log("user: " + user.user);
       getFollowers(user.user._id);
       getFollowings(user.user._id);
       getReviews(user.user._id);
@@ -137,11 +124,8 @@ export const ProfileContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (reviews.length >= 0) {
-      console.log("get reviews" + reviews);
-      //console.log("user: " + user.user);
       getAverageRating();
       getTags();
-      //console.log("all tags: " + tags);
     }
   }, [reviews]);
 
@@ -153,7 +137,6 @@ export const ProfileContextProvider = ({ children }) => {
     if (!viewingUser) {
       return;
     }
-    console.log("viewingUser: " + viewingUser);
   }, [viewingUser]);
 
   return (

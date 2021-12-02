@@ -6,6 +6,7 @@ export const restaurantsRequest = (term) => {
   
   return new Promise((resolve, reject) => {
     const body = { term }
+    console.log(term)
     axios
       .post(`/review/search-reviews`, body)
       .then((res) => {
