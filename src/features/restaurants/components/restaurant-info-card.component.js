@@ -34,14 +34,14 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
     restaurantId,
   } = restaurant;
 
-  console.log(restaurant);
+  //console.log(restaurant);
 
   var ratingArray = Array.from(
     new Array(Math.floor(restaurantId.avgRating.$numberDecimal))
   );
 
   if (restaurantId.avgRating.$numberDecimal === "0") {
-    console.log("zero rating");
+    //console.log("zero rating");
     ratingArray = Array.from(new Array(1));
   }
 

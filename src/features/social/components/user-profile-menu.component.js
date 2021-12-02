@@ -9,7 +9,7 @@ import {
   ProfileMenuContainer,
 } from "./user-profile.styles";
 
-export const ProfileMenu = () => {
+export const ProfileMenu = ({ navigation }) => {
   const [visible, setVisible] = React.useState(false);
 
   const openMenu = () => setVisible(true);
@@ -17,25 +17,8 @@ export const ProfileMenu = () => {
   const closeMenu = () => setVisible(false);
 
   return (
-    <Provider>
-      <ProfileMenuContainer>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Button onPress={openMenu}>
-              <Ionicons name="md-menu" size={24} color="black" />
-            </Button>
-          }
-        >
-          <MenuWrapper style={MenuWrapperStyle}>
-            <Menu.Item onPress={() => {}} title="Item 1" />
-            <Menu.Item onPress={() => {}} title="Item 2" />
-            <Divider />
-            <Menu.Item onPress={() => {}} title="Item 3" />
-          </MenuWrapper>
-        </Menu>
-      </ProfileMenuContainer>
-    </Provider>
+    <Button onPress={() => navigation.navigate("UserMenu")}>
+      <Ionicons name="md-menu" size={24} color="black" />
+    </Button>
   );
 };

@@ -19,11 +19,36 @@ export const FollowButton = styled.TouchableOpacity.attrs({
     elevation: 2, // Android
   },
 })`
-  padding: ${(props) => props.theme.space[2]};
+  padding: ${(props) => props.theme.space[1]};
   border-radius: 11px;
   background-color: ${colors.brand.primary};
   padding-left: ${(props) => props.theme.space[4]};
   padding-right: ${(props) => props.theme.space[4]};
+`;
+
+export const UnfollowButton = styled.TouchableOpacity.attrs({
+  style: {
+    shadowColor: "rgba(0,0,0, .4)", // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: "#fff",
+    elevation: 2, // Android
+  },
+})`
+  padding: ${(props) => props.theme.space[1]};
+  border-radius: 11px;
+  border-color: ${colors.brand.primary};
+  border-width: 2px;
+  background-color: #f8f8f8;
+  padding-left: ${(props) => props.theme.space[4]};
+  padding-right: ${(props) => props.theme.space[4]};
+`;
+
+export const UnfollowButtonText = styled(Text).attrs({
+  variant: "body",
+})`
+  color: black;
 `;
 
 export const ButtonText = styled(Text).attrs({

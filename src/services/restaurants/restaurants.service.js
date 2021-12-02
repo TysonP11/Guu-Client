@@ -3,14 +3,12 @@ import camelize from "camelize";
 import axios from "../../utils/axios";
 
 export const restaurantsRequest = (term) => {
-  
   return new Promise((resolve, reject) => {
-    const body = { term }
-    console.log(term)
+    const body = { term };
     axios
       .post(`/review/search-reviews`, body)
       .then((res) => {
-        resolve(res.data)
+        resolve(res.data);
       })
       .catch((err) => {
         reject(err);
