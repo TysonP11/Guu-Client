@@ -8,6 +8,7 @@ export const Icon = styled.Image`
 
 export const RestaurantCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
+  width: 99%;
 `;
 
 export const RestaurantCardCover = styled(Card.Cover)`
@@ -59,6 +60,14 @@ export const ReviewByContainer = styled.View`
   justify-content: center;
   padding: ${(props) => props.theme.space[2]};
   margin-top: ${(props) => props.theme.space[5]};
+  align-items: center;
+`;
+
+export const ProfileReviewList = styled.View`
+  background-color: #f8f8f8;
+  flex-direction: row;
+  justify-content: center;
+  padding: ${(props) => props.theme.space[2]};
   align-items: center;
 `;
 

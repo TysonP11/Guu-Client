@@ -9,6 +9,7 @@ import { UserProfileFeed } from "../components/user-profile-feed.component";
 import { ProfileContext } from "../../../services/profile/user-profile.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { ScrollView } from "react-native-gesture-handler";
+import { useEffect } from "react/cjs/react.development";
 
 const Loading = styled(ActivityIndicator)`
   margin-left: -25px;
@@ -19,8 +20,9 @@ const LoadingContainer = styled.View`
   left: 50%;
 `;
 
-export const MyProfileScreen = ({ navigation }) => {
+export const MyProfileScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthenticationContext);
+
   const {
     following,
     followers,
@@ -30,9 +32,18 @@ export const MyProfileScreen = ({ navigation }) => {
     tags,
     viewOptions,
     setViewing,
+    setViewingUser,
   } = useContext(ProfileContext);
 
   const { restaurants } = useContext(RestaurantsContext);
+
+  useEffect(() => {
+    if (!route || !route.params || !route.params.viewingUser) {
+      setViewingUser(user);
+    } else {
+      setViewingUser(route.params.viewingUser);
+    }
+  }, []);
 
   //console.log("isLoading" + isLoading);
   return (
@@ -58,6 +69,7 @@ export const MyProfileScreen = ({ navigation }) => {
           navigation={navigation}
           setViewing={setViewing}
           viewOptions={viewOptions}
+          reviews={reviews}
         />
       </ScrollView>
     </SafeArea>

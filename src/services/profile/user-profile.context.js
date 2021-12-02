@@ -31,6 +31,8 @@ export const ProfileContextProvider = ({ children }) => {
     },
   ]);
 
+  const [viewingUser, setViewingUser] = useState(null);
+
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
@@ -102,16 +104,16 @@ export const ProfileContextProvider = ({ children }) => {
   };
 
   const getAverageRating = () => {
-    if(reviews.length === 0) {
-      setAverageRating(0.0)
-    }else{
-    var sum = 0.0;
-    reviews.map((review) => {
-      sum += parseFloat(review.rating.$numberDecimal);
-      console.log(review.rating.$numberDecimal);
-    });
-    setAverageRating((sum / reviews.length).toFixed(2));
-  }
+    if (reviews.length === 0) {
+      setAverageRating(0.0);
+    } else {
+      var sum = 0.0;
+      reviews.map((review) => {
+        sum += parseFloat(review.rating.$numberDecimal);
+        console.log(review.rating.$numberDecimal);
+      });
+      setAverageRating((sum / reviews.length).toFixed(2));
+    }
     console.log(averageRating);
   };
 
@@ -147,6 +149,13 @@ export const ProfileContextProvider = ({ children }) => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   }, []);
 
+  useEffect(() => {
+    if (!viewingUser) {
+      return;
+    }
+    console.log("viewingUser: " + viewingUser);
+  }, [viewingUser]);
+
   return (
     <ProfileContext.Provider
       value={{
@@ -162,6 +171,8 @@ export const ProfileContextProvider = ({ children }) => {
         tags,
         setViewing,
         viewOptions,
+        viewingUser,
+        setViewingUser,
       }}
     >
       {children}

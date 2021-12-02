@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import {
   ProfileFeed,
@@ -15,6 +15,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { RestaurantInfoCard } from "../../restaurants/components/restaurant-info-card.component";
 import { MapScreen } from "../../map/screens/map.screen";
+import {
+  ProfileReviewList,
+  RatingPill,
+  ReviewByContainer,
+} from "../../restaurants/components/restaurant-info-card.styles";
 
 const RestaurantList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -22,19 +27,22 @@ const RestaurantList = styled(FlatList).attrs({
   },
 })``;
 
+const ratingTexts = ["Awful", "Meh", "Good", "Awesome", "Awesome"];
+
 export const UserProfileFeed = ({
   user,
   restaurants,
   navigation,
   setViewing,
   viewOptions,
+  reviews,
 }) => {
   return (
     <ProfileFeed>
       <ViewSelectContainer>
         {viewOptions.map((option) =>
           option.isSelected ? (
-            <ViewSelected>
+            <ViewSelected key="list">
               <Ionicons
                 name={option.name}
                 size={24}
@@ -42,7 +50,7 @@ export const UserProfileFeed = ({
               />
             </ViewSelected>
           ) : (
-            <ViewDefault onPress={() => setViewing(option.name)}>
+            <ViewDefault key="map" onPress={() => setViewing(option.name)}>
               <Ionicons
                 name={option.name}
                 size={24}
@@ -54,7 +62,7 @@ export const UserProfileFeed = ({
       </ViewSelectContainer>
       {viewOptions[0].isSelected ? (
         <RestaurantList
-          data={restaurants}
+          data={reviews}
           horizontal={true}
           renderItem={({ item }) => {
             return (
@@ -66,12 +74,20 @@ export const UserProfileFeed = ({
                 }
               >
                 <Spacer position="right" size="large">
+                  <ProfileReviewList>
+                    <Text variant="label">Rated </Text>
+                    <RatingPill>
+                      <Text>
+                        {ratingTexts[Math.floor(item.rating.$numberDecimal)]}
+                      </Text>
+                    </RatingPill>
+                  </ProfileReviewList>
                   <RestaurantInfoCard restaurant={item} />
                 </Spacer>
               </TouchableOpacity>
             );
           }}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item._id}
         />
       ) : (
         <View></View>

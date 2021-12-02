@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { FlatList, TouchableOpacity, Image, View } from "react-native";
 import styled from "styled-components/native";
 import { ActivityIndicator, Colors } from "react-native-paper";
@@ -46,9 +46,7 @@ const LoadingContainer = styled.View`
   left: 50%;
 `;
 
-const ratingTexts = [
-  'Awful', 'Meh', 'Good', 'Awesome', "Awesome"
-]
+const ratingTexts = ["Awful", "Meh", "Good", "Awesome", "Awesome"];
 
 export const RestaurantsScreen = ({ navigation }) => {
   const { isLoading, restaurants, reviews } = useContext(RestaurantsContext);
@@ -56,11 +54,12 @@ export const RestaurantsScreen = ({ navigation }) => {
   const [isToggled, setIsToggled] = useState(false);
 
   useEffect(() => {
-    if(reviews && reviews.reviews && reviews.reviews.length > 0 ){
+    if (reviews && reviews.reviews && reviews.reviews.length > 0) {
+      console.log(reviews.reviews[0]);
       console.log(Math.floor(reviews.reviews[0].rating.$numberDecimal));
-      }
-  },[reviews])
-  
+    }
+  }, [reviews]);
+
   return (
     <SafeArea>
       {isLoading && (
@@ -97,67 +96,75 @@ export const RestaurantsScreen = ({ navigation }) => {
         }}
         keyExtractor={(item) => item.name}
       /> */}
-
-      <ReviewByContainer>
-        <Text variant="label">Rated </Text>
-        <RatingPill>
-          {reviews && reviews.reviews && reviews.reviews.length > 0 && (
-            <Text>{ratingTexts[Math.floor(reviews.reviews[0].rating.$numberDecimal)]}</Text>
-          )}
-          
-        </RatingPill>
-        <Spacer position="right" size="medium">
-          <Text variant="label">by </Text>
-        </Spacer>
-        <Image
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 200,
-            borderWidth: 2,
-            //borderColor: colors.brand.primary,
-          }}
-          source={{
-            uri: "https://picsum.photos/200",
-          }}
-        />
-
-        <ProfileNameListItem>thso12</ProfileNameListItem>
-      </ReviewByContainer>
-      <SingleCardView>
-        <Spacer position="bottom" size="large">
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("RestaurantDetail", {
-                restaurant: restaurants[1],
-              })
-            }
-          >
-            <Spacer position="bottom" size="large">
-              <RestaurantInfoCard restaurant={restaurants[1]} />
+      {reviews && reviews.reviews && reviews.reviews.length > 0 && (
+        <>
+          <ReviewByContainer>
+            <Text variant="label">Rated </Text>
+            <RatingPill>
+              {reviews && reviews.reviews && reviews.reviews.length > 0 && (
+                <Text>
+                  {
+                    ratingTexts[
+                      Math.floor(reviews.reviews[0].rating.$numberDecimal)
+                    ]
+                  }
+                </Text>
+              )}
+            </RatingPill>
+            <Spacer position="right" size="medium">
+              <Text variant="label">by </Text>
             </Spacer>
-          </TouchableOpacity>
-        </Spacer>
-      </SingleCardView>
-      <RatingButtonContainer>
-        <RatingButtonSmall>
-          <Text>Awful</Text>
-        </RatingButtonSmall>
-        <RatingButton>
-          <Text>Meh</Text>
-        </RatingButton>
-        <RatingButton2>
-          <Text>Good</Text>
-        </RatingButton2>
-        <RatingButtonSmall2>
-          <Text variant="small">Awesome</Text>
-        </RatingButtonSmall2>
-      </RatingButtonContainer>
-      <OtherOptionsContainer>
-        <OtherOptions>
-          <Text>Not Interested</Text>
-        </OtherOptions>
-      </OtherOptionsContainer>
+            <Image
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 200,
+                borderWidth: 2,
+                //borderColor: colors.brand.primary,
+              }}
+              source={{
+                uri: "https://picsum.photos/200",
+              }}
+            />
+
+            <ProfileNameListItem>thso12</ProfileNameListItem>
+          </ReviewByContainer>
+          <SingleCardView>
+            <Spacer position="bottom" size="large">
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("RestaurantDetail", {
+                    restaurant: reviews.reviews[0],
+                  })
+                }
+              >
+                <Spacer position="bottom" size="large">
+                  <RestaurantInfoCard restaurant={reviews.reviews[0]} />
+                </Spacer>
+              </TouchableOpacity>
+            </Spacer>
+          </SingleCardView>
+          <RatingButtonContainer>
+            <RatingButtonSmall>
+              <Text>Awful</Text>
+            </RatingButtonSmall>
+            <RatingButton>
+              <Text>Meh</Text>
+            </RatingButton>
+            <RatingButton2>
+              <Text>Good</Text>
+            </RatingButton2>
+            <RatingButtonSmall2>
+              <Text variant="small">Awesome</Text>
+            </RatingButtonSmall2>
+          </RatingButtonContainer>
+          <OtherOptionsContainer>
+            <OtherOptions>
+              <Text>Not Interested</Text>
+            </OtherOptions>
+          </OtherOptionsContainer>
+        </>
+      )}
     </SafeArea>
   );
 };

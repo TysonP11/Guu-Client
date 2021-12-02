@@ -97,7 +97,7 @@ export const RestaurantDetailScreen = ({ route }) => {
         }}
         keyExtractor={(item) => item._id}
       />
-      <View style={{ bottom: 252 }}>
+      <View style={{ bottom: 236 }}>
         <ReviewListItem>
           <Text variant="label">Rated </Text>
           <RatingPill2>

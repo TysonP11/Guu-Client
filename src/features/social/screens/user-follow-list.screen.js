@@ -38,22 +38,30 @@ export const FollowListUser = ({ navigation, route }) => {
         renderItem={({ item }) => {
           return (
             <UserListItem>
-              <Spacer position="left" size="large">
-                <Image
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 200,
-                    borderWidth: 2,
-                    //borderColor: colors.brand.primary,
-                  }}
-                  source={{
-                    uri: "https://picsum.photos/200",
-                  }}
-                />
-              </Spacer>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("My Profile", {
+                    user: item,
+                  })
+                }
+              >
+                <Spacer position="left" size="large">
+                  <Image
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 200,
+                      borderWidth: 2,
+                      //borderColor: colors.brand.primary,
+                    }}
+                    source={{
+                      uri: "https://picsum.photos/200",
+                    }}
+                  />
+                </Spacer>
 
-              <ProfileNameListItem>{item.username}</ProfileNameListItem>
+                <ProfileNameListItem>{item.username}</ProfileNameListItem>
+              </TouchableOpacity>
             </UserListItem>
           );
         }}

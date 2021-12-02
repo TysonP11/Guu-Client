@@ -31,18 +31,44 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
     rating = 4,
     isClosedTemporarily = true,
     placeId,
+    restaurantId,
   } = restaurant;
 
-  const ratingArray = Array.from(new Array(Math.floor(rating)));
+  console.log(restaurant);
+
+  var ratingArray = Array.from(
+    new Array(Math.floor(restaurantId.avgRating.$numberDecimal))
+  );
+
+  if (restaurantId.avgRating.$numberDecimal === "0") {
+    console.log("zero rating");
+    ratingArray = Array.from(new Array(1));
+  }
 
   return (
     <RestaurantCard elevation={5}>
       <View>
         {/* <Favourite restaurant={restaurant} /> */}
-        <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
+        {restaurantId.photos.length > 0 ? (
+          <RestaurantCardCover
+            key={restaurantId.name}
+            source={{
+              uri:
+                "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
+            }}
+          />
+        ) : (
+          <RestaurantCardCover
+            key={restaurantId.address.name}
+            source={{
+              uri:
+                "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
+            }}
+          />
+        )}
       </View>
       <Info>
-        <Text variant="label">{name}</Text>
+        <Text variant="label">{restaurantId.name}</Text>
         <Section>
           <Rating>
             {ratingArray.map((_, i) => (
@@ -54,20 +80,23 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
               />
             ))}
           </Rating>
-          <SectionEnd>
-            {isClosedTemporarily && (
+          {/* <SectionEnd>
+             {isClosedTemporarily && (
               <Text variant="error">CLOSED TEMPORARILY</Text>
-            )}
+            )} 
             <Spacer position="left" size="large">
               {isOpenNow && <SvgXml xml={open} width={20} height={20} />}
             </Spacer>
             <Spacer position="left" size="large">
               <Icon source={{ uri: icon }} />
             </Spacer>
-          </SectionEnd>
+          </SectionEnd> */}
         </Section>
         <Address>{address}</Address>
       </Info>
+      {/* <View style={{ height: 50 }}>
+        <Text></Text>
+      </View> */}
     </RestaurantCard>
   );
 };
