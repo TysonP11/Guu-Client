@@ -26,7 +26,8 @@ export const RestaurantsScreen = ({ navigation }) => {
     isLoading,
     restaurants,
     reviews: { reviews },
-    retrieveRestaurants
+    retrieveRestaurants,
+    checkReviewed
   } = useContext(RestaurantsContext)
   const { favourites } = useContext(FavouritesContext)
   const [isToggled, setIsToggled] = useState(false)
@@ -40,6 +41,11 @@ export const RestaurantsScreen = ({ navigation }) => {
       setReviewIndex(1)
     }
   }
+
+  useEffect(() => {
+    if(!reviews || !reviewIndex || reviews.length === 0) return
+    checkReviewed(reviews[reviewIndex-1].restaurantId._id)
+  }, [reviews,reviewIndex])
 
   useEffect(() => {
     retrieveRestaurants('')
@@ -84,6 +90,7 @@ export const RestaurantsScreen = ({ navigation }) => {
       <ReviewInfoCardItem
         review={reviews[reviewIndex - 1]}
         navigation={navigation}
+        checkReviewed = {checkReviewed}
       />
       <OtherOptionsContainer>
         <OtherOptions onPress={() => switchReview(reviews.length)}>

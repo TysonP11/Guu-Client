@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from 'react'
 
-import { restaurantsRequest, restaurantsTransform } from './restaurants.service'
+import { restaurantsRequest, restaurantsTransform, checkReviewedRequest } from './restaurants.service'
 
 import { LocationContext } from '../location/location.context'
 
@@ -13,6 +13,7 @@ export const RestaurantsContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const { location, keyword } = useContext(LocationContext)
+  const [isReviewed, setIsReviewed] = useState(false)
 
   const retrieveRestaurants = (term) => {
     setIsLoading(true)
@@ -21,6 +22,20 @@ export const RestaurantsContextProvider = ({ children }) => {
       .then((results) => {
         setIsLoading(false)
         setReviews(results)
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        setError(err)
+      })
+  }
+
+  const checkReviewed = (restaurantId) => {
+    setIsLoading(true)
+    checkReviewedRequest(restaurantId)
+      .then((result) => {
+        console.log(result)
+        setIsLoading(false)
+        //setIsReviewed(result.isReviewed)
       })
       .catch((err) => {
         setIsLoading(false)
@@ -39,7 +54,9 @@ export const RestaurantsContextProvider = ({ children }) => {
         isLoading,
         error,
         reviews,
-        retrieveRestaurants
+        retrieveRestaurants,
+        checkReviewed,
+        isReviewed
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TouchableOpacity, Image } from 'react-native'
 import { ActivityIndicator, Colors } from 'react-native-paper'
 import { Spacer } from '../../../components/spacer/spacer.component'
@@ -25,9 +25,23 @@ const LoadingContainer = styled.View`
   left: 50%;
 `
 
+const ratingMap = new Map()
+ratingMap.set('1', 'Awful')
+ratingMap.set('2', 'Meh')
+ratingMap.set('3', 'Good')
+ratingMap.set('4', 'Awesome')
+
 const ratingTexts = ['Awful', 'Meh', 'Good', 'Awesome', 'Awesome']
-export const ReviewInfoCardItem = ({ review, navigation }) => {
-  return !review || !navigation ? (
+export const ReviewInfoCardItem = ({
+  review,
+  navigation,
+  checkReviewed
+}) => {
+
+
+
+  return !review ||
+    !navigation ? (
     <LoadingContainer>
       <Loading size={50} animating={true} color={Colors.blue300} />
     </LoadingContainer>
@@ -54,7 +68,9 @@ export const ReviewInfoCardItem = ({ review, navigation }) => {
           }}
         />
 
-        <ProfileNameListItem><Text variant='label'>{review.userId.username}</Text></ProfileNameListItem>
+        <ProfileNameListItem>
+          <Text variant='label'>{review.userId.username}</Text>
+        </ProfileNameListItem>
       </ReviewByContainer>
       <SingleCardView>
         <Spacer position='bottom' size='large'>
@@ -71,20 +87,27 @@ export const ReviewInfoCardItem = ({ review, navigation }) => {
           </TouchableOpacity>
         </Spacer>
       </SingleCardView>
-      <RatingButtonContainer>
-        <RatingButtonSmall>
-          <Text>Awful</Text>
-        </RatingButtonSmall>
-        <RatingButton>
-          <Text>Meh</Text>
-        </RatingButton>
-        <RatingButton2>
-          <Text>Good</Text>
-        </RatingButton2>
-        <RatingButtonSmall2>
-          <Text variant='small'>Awesome</Text>
-        </RatingButtonSmall2>
-      </RatingButtonContainer>
+
+      {/* {isReviewed ? (
+        <Text>Reviewed</Text>
+      ) : (
+        <>
+          <RatingButtonContainer>
+            <RatingButtonSmall>
+              <Text>Awful</Text>
+            </RatingButtonSmall>
+            <RatingButton>
+              <Text>Meh</Text>
+            </RatingButton>
+            <RatingButton2>
+              <Text>Good</Text>
+            </RatingButton2>
+            <RatingButtonSmall2>
+              <Text variant='small'>Awesome</Text>
+            </RatingButtonSmall2>
+          </RatingButtonContainer>
+        </>
+      )} */}
     </>
   )
 }

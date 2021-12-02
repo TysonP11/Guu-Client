@@ -16,6 +16,20 @@ export const restaurantsRequest = (term) => {
   });
 };
 
+export const checkReviewedRequest = (restaurantId) => {
+  return new Promise((resolve, reject) => {
+    
+    axios
+      .get(`/review/check-reviewed?restaurantId=${restaurantId}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const restaurantsTransform = ({ results = [] }) => {
   const mappedResults = results.map((restaurant) => {
     restaurant.photos = restaurant.photos.map((p) => {
