@@ -13,14 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react/cjs/react.development";
 import { ProfileContext } from "../../../services/profile/user-profile.context";
 
-export const UserProfileHeader = ({ user }) => {
+export const UserProfileHeader = ({ user, navigation }) => {
   const { username } = user;
   const { visible, closeMenu, openMenu } = useContext(ProfileContext);
 
   return (
     <ProfileHeader>
       <ProfileName>{username}</ProfileName>
-      <ProfileMenu />
+      <ProfileMenu navigation={navigation} />
     </ProfileHeader>
   );
 };

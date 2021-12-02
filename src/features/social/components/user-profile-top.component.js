@@ -16,9 +16,12 @@ import {
   ReviewsInfo,
   TagPill,
   TagsContainer,
+  UnfollowButton,
+  UnfollowButtonText,
 } from "./user-profile.styles";
 import { Button } from "react-native-paper";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useState, useEffect } from "react";
 
 export const UserProfileTop = ({
   user,
@@ -28,12 +31,22 @@ export const UserProfileTop = ({
   averageRating,
   tags,
   navigation,
+  loggedInUser,
+  isFollowing,
+  isOwnProfile,
 }) => {
   const ratingArray = Array.from(new Array(Math.floor(averageRating)));
 
-  return (
+  return !user ||
+    !following ||
+    !followers ||
+    !averageRating ||
+    !tags ||
+    isOwnProfile === undefined ? (
+    <></>
+  ) : (
     <ProfileTop>
-      <UserProfileHeader user={user} />
+      <UserProfileHeader user={user} navigation={navigation} />
       <ProfileInfo>
         <Image
           style={{
@@ -96,9 +109,23 @@ export const UserProfileTop = ({
           </TouchableOpacity>
         </ProfileFollowDetail>
         <ProfileFollowDetail>
-          <FollowButton>
-            <ButtonText>Follow</ButtonText>
-          </FollowButton>
+          {isOwnProfile ? (
+            <FollowButton>
+              <ButtonText>Add Review</ButtonText>
+            </FollowButton>
+          ) : (
+            <>
+              {isFollowing ? (
+                <UnfollowButton>
+                  <UnfollowButtonText>Unfollow</UnfollowButtonText>
+                </UnfollowButton>
+              ) : (
+                <FollowButton>
+                  <ButtonText>Follow</ButtonText>
+                </FollowButton>
+              )}
+            </>
+          )}
         </ProfileFollowDetail>
       </ProfileFollowContainer>
     </ProfileTop>

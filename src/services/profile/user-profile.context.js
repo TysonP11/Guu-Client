@@ -20,6 +20,10 @@ export const ProfileContextProvider = ({ children }) => {
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0.0);
   const [tags, setTags] = useState([]);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isOwnProfile, setIsOwnProfile] = useState(null);
+
   const [viewOptions, setViewOptions] = useState([
     {
       name: "md-list",
@@ -40,7 +44,7 @@ export const ProfileContextProvider = ({ children }) => {
   const getFollowers = (userId) => {
     //console.log("useEffect" + userId);
     setIsLoading(true);
-    getFollowersRequest(userId.toString())
+    getFollowersRequest(userId)
       .then((f) => {
         //console.log("getting followers: " + JSON.stringify(f));
         setFollowers(f);
@@ -73,7 +77,7 @@ export const ProfileContextProvider = ({ children }) => {
 
   const getFollowings = (userId) => {
     setIsLoading(true);
-    getFollowingsRequest(userId.toString())
+    getFollowingsRequest(userId)
       .then((f) => {
         //console.log("getting followings: " + JSON.stringify(f));
         setFollowing(f);
@@ -89,9 +93,9 @@ export const ProfileContextProvider = ({ children }) => {
   const getReviews = (userId) => {
     console.log(userId);
     setIsLoading(true);
-    getReviewsRequest(userId.toString())
+    getReviewsRequest(userId)
       .then((r) => {
-        console.log("getting reviews: " + JSON.stringify(r));
+        //console.log("getting reviews: " + JSON.stringify(r));
         setReviews(r.reviews);
         //getAverageRating();
         setIsLoading(false);
@@ -110,7 +114,7 @@ export const ProfileContextProvider = ({ children }) => {
       var sum = 0.0;
       reviews.map((review) => {
         sum += parseFloat(review.rating.$numberDecimal);
-        console.log(review.rating.$numberDecimal);
+        //console.log(review.rating.$numberDecimal);
       });
       setAverageRating((sum / reviews.length).toFixed(2));
     }
@@ -126,23 +130,24 @@ export const ProfileContextProvider = ({ children }) => {
     setTags(tagsArray);
   };
 
-  useEffect(() => {
-    if (user) {
-      //console.log("user: " + user.user);
-      getFollowers(user.user._id);
-      getFollowings(user.user._id);
-      getReviews(user.user._id);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (viewingUser) {
+  //     //console.log("user: " + user.user);
+  //     getFollowers(viewingUser._id);
+  //     getFollowings(viewingUser._id);
+  //     getReviews(viewingUser._id);
+  //   }
+  // }, [viewingUser]);
 
   useEffect(() => {
     if (reviews.length >= 0) {
-      console.log("get reviews" + reviews);
+      //console.log("get reviews" + reviews);
       //console.log("user: " + user.user);
       getAverageRating();
       getTags();
       //console.log("all tags: " + tags);
     }
+    /* eslint-disable */
   }, [reviews]);
 
   useEffect(() => {
@@ -153,8 +158,46 @@ export const ProfileContextProvider = ({ children }) => {
     if (!viewingUser) {
       return;
     }
-    console.log("viewingUser: " + viewingUser);
+    console.log("viewingUser: " + JSON.stringify(viewingUser));
+    getFollowers(viewingUser._id);
+    getFollowings(viewingUser._id);
+    getReviews(viewingUser._id);
   }, [viewingUser]);
+
+  useEffect(() => {
+    if (!viewingUser) {
+      return;
+    }
+
+    if (!followers) {
+      return;
+    }
+
+    if (!user) {
+      return;
+    }
+
+    console.log(followers);
+    setIsFollowing(false);
+    followers.followers.forEach((f) => {
+      if (user.user._id === f._id) {
+        setIsFollowing(true);
+      }
+    });
+  }, [followers]);
+  useEffect(() => {
+    if (!user || !viewingUser) {
+      return;
+    } else {
+      if (user.user._id.toString() !== viewingUser._id.toString()) {
+        setIsOwnProfile(false);
+        console.log("is own profile = " + isOwnProfile);
+      } else {
+        setIsOwnProfile(true);
+        console.log("is own profile = " + isOwnProfile);
+      }
+    }
+  }, [user, viewingUser]);
 
   return (
     <ProfileContext.Provider
@@ -173,6 +216,8 @@ export const ProfileContextProvider = ({ children }) => {
         viewOptions,
         viewingUser,
         setViewingUser,
+        isFollowing,
+        isOwnProfile,
       }}
     >
       {children}

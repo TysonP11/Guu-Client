@@ -55,8 +55,8 @@ export const RestaurantsScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (reviews && reviews.reviews && reviews.reviews.length > 0) {
-      console.log(reviews.reviews[0]);
-      console.log(Math.floor(reviews.reviews[0].rating.$numberDecimal));
+      //console.log(reviews.reviews[0]);
+      //console.log(Math.floor(reviews.reviews[0].rating.$numberDecimal));
     }
   }, [reviews]);
 

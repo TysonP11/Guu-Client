@@ -12,7 +12,7 @@ export const RestaurantsContext = createContext();
 export const RestaurantsContextProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { location, keyword } = useContext(LocationContext);
@@ -21,25 +21,20 @@ export const RestaurantsContextProvider = ({ children }) => {
     setIsLoading(true);
     setRestaurants([]);
 
-      restaurantsRequest(term)
-        .then((results) => {
-          setIsLoading(false);
-          setReviews(results);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setError(err);
-        });
-   
+    restaurantsRequest(term)
+      .then((results) => {
+        setIsLoading(false);
+        setReviews(results);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err);
+      });
   };
   useEffect(() => {
-
-      retrieveRestaurants(keyword);
-      console.log('keyword: ' + keyword);
-    
+    retrieveRestaurants(keyword);
+    console.log("keyword: " + keyword);
   }, [keyword]);
-
-  
 
   return (
     <RestaurantsContext.Provider
@@ -47,7 +42,7 @@ export const RestaurantsContextProvider = ({ children }) => {
         restaurants,
         isLoading,
         error,
-        reviews
+        reviews,
       }}
     >
       {children}
