@@ -16,6 +16,33 @@ export const restaurantsRequest = (term) => {
   });
 };
 
+export const restaurantsForNewReviewRequest = (term) => {
+  return new Promise((resolve, reject) => {
+    const body = { term };
+    axios
+      .post(`/restaurant/search-restaurants`, body)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const reviewsByRestaurantRequest = (restaurantId) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/review/get-reviews-by-res?restaurantId=${restaurantId}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const restaurantsTransform = ({ results = [] }) => {
   const mappedResults = results.map((restaurant) => {
     restaurant.photos = restaurant.photos.map((p) => {

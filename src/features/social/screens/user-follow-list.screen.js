@@ -41,7 +41,7 @@ export const FollowListUser = ({ navigation, route }) => {
               <TouchableOpacity
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() =>
-                  navigation.navigate("My Profile", {
+                  navigation.navigate("Profile", {
                     user: item,
                   })
                 }

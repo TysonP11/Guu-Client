@@ -1,36 +1,109 @@
-import React, { useState, useContext, createContext, useEffect } from 'react'
+import React, { useState, useContext, createContext, useEffect } from "react";
 
-import { restaurantsRequest, restaurantsTransform } from './restaurants.service'
+import {
+  restaurantsRequest,
+  restaurantsTransform,
+  restaurantsForNewReviewRequest,
+  reviewsByRestaurantRequest,
+} from "./restaurants.service";
 
-import { LocationContext } from '../location/location.context'
+import { LocationContext } from "../location/location.context";
 
-export const RestaurantsContext = createContext()
+export const RestaurantsContext = createContext();
 
 export const RestaurantsContextProvider = ({ children }) => {
-  const [restaurants, setRestaurants] = useState([])
-  const [reviews, setReviews] = useState([])
+  const [restaurants, setRestaurants] = useState([]);
+  const [selected, setSelected] = useState();
+  const [restaurantKeyword, setRestaurantKeyword] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [restaurantsReviews, setRestaurantsReviews] = useState([]);
+  const [viewingRestaurantId, setViewingRestaurantId] = useState("");
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const { location, keyword } = useContext(LocationContext)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { location, keyword } = useContext(LocationContext);
 
-  const retrieveRestaurants = (term) => {
-    setIsLoading(true)
-    setRestaurants([])
-    restaurantsRequest(term)
+  const onRestaurantSearch = (searchKeyword) => {
+    setIsLoading(true);
+    setRestaurantKeyword(searchKeyword);
+  };
+
+  const getReviewsByRestaurant = (restaurantId) => {
+    setIsLoading(true);
+    setRestaurantsReviews([]);
+    reviewsByRestaurantRequest(restaurantId)
       .then((results) => {
-        setIsLoading(false)
-        setReviews(results)
+        console.log("restaurants reviews: " + JSON.stringify(results));
+        setIsLoading(false);
+        setRestaurantsReviews(results);
       })
       .catch((err) => {
-        setIsLoading(false)
-        setError(err)
+        setIsLoading(false);
+        setError(err);
+      });
+  };
+
+  const searchNewRestaurant = (term) => {
+    setIsLoading(true);
+    setRestaurants([]);
+    setSelected(null);
+    restaurantsForNewReviewRequest(term)
+      .then((results) => {
+        setIsLoading(false);
+        setRestaurants(results);
       })
-  }
-  
-  useEffect(() => {    
-    retrieveRestaurants(keyword)
-  }, [keyword])
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err);
+      });
+  };
+
+  const retrieveRestaurants = (term) => {
+    setIsLoading(true);
+    //setRestaurants([]);
+    restaurantsRequest(term)
+      .then((results) => {
+        setIsLoading(false);
+        setReviews(results);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err);
+      });
+  };
+
+  useEffect(() => {
+    retrieveRestaurants(keyword);
+  }, [keyword]);
+
+  useEffect(() => {
+    if (!viewingRestaurantId) {
+      return;
+    }
+    console.log("use effect" + viewingRestaurantId);
+    getReviewsByRestaurant(viewingRestaurantId.toString());
+  }, [viewingRestaurantId]);
+
+  useEffect(() => {
+    if (!selected) {
+      return;
+    }
+    const selectedRestaurant = {
+      restaurants: [selected],
+    };
+    setRestaurants(selectedRestaurant);
+  }, [selected]);
+
+  useEffect(() => {
+    if (
+      restaurantKeyword === "" ||
+      restaurantKeyword === null ||
+      restaurantKeyword === undefined
+    ) {
+      return;
+    }
+    searchNewRestaurant(restaurantKeyword);
+  }, [restaurantKeyword]);
 
   return (
     <RestaurantsContext.Provider
@@ -39,10 +112,16 @@ export const RestaurantsContextProvider = ({ children }) => {
         isLoading,
         error,
         reviews,
-        retrieveRestaurants
+        retrieveRestaurants,
+        restaurantKeyword,
+        restaurantSearch: onRestaurantSearch,
+        selected,
+        setSelected,
+        restaurantsReviews,
+        setViewingRestaurantId,
       }}
     >
       {children}
     </RestaurantsContext.Provider>
-  )
-}
+  );
+};

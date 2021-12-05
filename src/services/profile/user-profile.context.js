@@ -3,6 +3,7 @@ import { LogBox } from "react-native";
 import { useContext } from "react/cjs/react.development";
 import { AuthenticationContext } from "../authentication/authentication.context";
 import {
+  followUserRequest,
   getFollowersRequest,
   getFollowingsRequest,
   getReviewsRequest,
@@ -84,19 +85,27 @@ export const ProfileContextProvider = ({ children }) => {
       });
   };
 
-  const getReviews = (userId) => {
+  const followUser = (userId) => {
     setIsLoading(true);
-    getReviewsRequest(userId)
+    followUserRequest(userId)
       .then((r) => {
-        //console.log("getting reviews: " + JSON.stringify(r));
-        setReviews(r.reviews);
-        //getAverageRating();
+        getFollowers(userId);
         setIsLoading(false);
       })
       .catch((e) => {
         setIsLoading(false);
         setError(e.response.data.error);
       });
+  };
+
+  const getReviews = (userId) => {
+    setIsLoading(true);
+    getReviewsRequest(userId).then((r) => {
+      //console.log("getting reviews: " + JSON.stringify(r));
+      setReviews(r.reviews);
+      //getAverageRating();
+      setIsLoading(false);
+    });
   };
 
   const getAverageRating = () => {
@@ -147,7 +156,7 @@ export const ProfileContextProvider = ({ children }) => {
     if (!viewingUser) {
       return;
     }
-    console.log("viewingUser: " + JSON.stringify(viewingUser));
+    //console.log("viewingUser: " + JSON.stringify(viewingUser));
     getFollowers(viewingUser._id);
     getFollowings(viewingUser._id);
     getReviews(viewingUser._id);
@@ -166,7 +175,7 @@ export const ProfileContextProvider = ({ children }) => {
       return;
     }
 
-    console.log(followers);
+    //console.log(followers);
     setIsFollowing(false);
     followers.followers.forEach((f) => {
       if (user.user._id === f._id) {
@@ -174,16 +183,17 @@ export const ProfileContextProvider = ({ children }) => {
       }
     });
   }, [followers]);
+
   useEffect(() => {
     if (!user || !viewingUser) {
       return;
     } else {
       if (user.user._id.toString() !== viewingUser._id.toString()) {
         setIsOwnProfile(false);
-        console.log("is own profile = " + isOwnProfile);
+        //console.log("is own profile = " + isOwnProfile);
       } else {
         setIsOwnProfile(true);
-        console.log("is own profile = " + isOwnProfile);
+        //console.log("is own profile = " + isOwnProfile);
       }
     }
   }, [user, viewingUser]);
@@ -207,6 +217,7 @@ export const ProfileContextProvider = ({ children }) => {
         setViewingUser,
         isFollowing,
         isOwnProfile,
+        followUser,
       }}
     >
       {children}

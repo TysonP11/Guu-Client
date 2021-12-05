@@ -30,9 +30,19 @@ export const CompactRestaurantInfo = ({ restaurant, isMap }) => {
 
   return (
     <Item>
-      <Image source={{ uri: restaurant.photos[0] }} />
+      {restaurant.restaurantId.photos.length > 0 ? (
+        <Image source={{ uri: restaurant.restaurantId.photos[0].url }} />
+      ) : (
+        <Image
+          source={{
+            uri:
+              "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
+          }}
+        />
+      )}
+
       <Text center variant="caption" numberOfLines={3}>
-        {restaurant.name}
+        {restaurant.restaurantId.name}
       </Text>
     </Item>
   );

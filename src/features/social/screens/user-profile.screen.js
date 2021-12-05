@@ -36,17 +36,18 @@ export const MyProfileScreen = ({ navigation, route }) => {
     viewingUser,
     isFollowing,
     isOwnProfile,
+    followUser,
   } = useContext(ProfileContext);
 
   const { restaurants } = useContext(RestaurantsContext);
 
   useEffect(() => {
     if (!route || !route.params || !route.params.user) {
-      console.log("viewing logged in user");
+      //console.log("viewing logged in user");
       setViewingUser(user.user);
     } else if (route.params.user) {
-      console.log(route);
-      console.log("viewing other user" + JSON.stringify(route.params.user));
+      //console.log(route);
+      //console.log("viewing other user" + JSON.stringify(route.params.user));
       setViewingUser(route.params.user);
     }
   }, [user, route]);
@@ -60,13 +61,14 @@ export const MyProfileScreen = ({ navigation, route }) => {
         </LoadingContainer>
       ) : (
         <ScrollView>
-          {!viewingUser || !followers || !following || isLoading ? (
+          {!viewingUser || !reviews || !followers || !following || isLoading ? (
             <LoadingContainer>
               <Loading size={50} animating={true} color={Colors.blue300} />
             </LoadingContainer>
           ) : (
             <>
               <UserProfileTop
+                followUser={followUser}
                 isFollowing={isFollowing}
                 user={viewingUser}
                 loggedInUser={user.user}
