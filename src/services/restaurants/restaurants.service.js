@@ -30,6 +30,25 @@ export const checkReviewedRequest = (restaurantId) => {
   });
 };
 
+export const postReviewRequest = (review) => {
+  return new Promise((resolve, reject) => {
+    
+    const body = { review }
+
+    console.log(body)
+
+    axios
+      .post(`/review/post-review`, review)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+  });
+};
+
 export const restaurantsTransform = ({ results = [] }) => {
   const mappedResults = results.map((restaurant) => {
     restaurant.photos = restaurant.photos.map((p) => {

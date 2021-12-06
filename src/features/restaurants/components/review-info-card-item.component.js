@@ -14,6 +14,10 @@ import {
   RatingButtonSmall,
   RatingButton2,
   RatingButtonSmall2,
+  RatingButtonSmallActive,
+  RatingButtonSmall2Active,
+  RatingButtonActive,
+  RatingButton2Active
 } from './restaurant-info-card.styles'
 import { ProfileNameListItem } from '../../social/components/user-profile.styles'
 const Loading = styled(ActivityIndicator)`
@@ -31,17 +35,30 @@ ratingMap.set('2', 'Meh')
 ratingMap.set('3', 'Good')
 ratingMap.set('4', 'Awesome')
 
-const ratingTexts = ['Awful', 'Meh', 'Good', 'Awesome', 'Awesome']
 export const ReviewInfoCardItem = ({
   review,
   navigation,
-  checkReviewed
+  isReviewed,
+  postReview,
+  rating,
 }) => {
+  const onPostReview = (inputRating) => {
+    const newReview = {
+      restaurantId: review.restaurantId._id,
+      title: `RE by @${review.userId.username}: ${review.title}`,
+      contentText: ratingMap.get(inputRating.toString()),
+      rating: inputRating,
+      tags: review.tags,
+      isReviewed: isReviewed,
+      reviewId: review._id,
+    }
 
+    // console.log(newReview)
 
+    postReview(newReview)
+  }
 
-  return !review ||
-    !navigation ? (
+  return !review || !navigation ? (
     <LoadingContainer>
       <Loading size={50} animating={true} color={Colors.blue300} />
     </LoadingContainer>
@@ -50,7 +67,7 @@ export const ReviewInfoCardItem = ({
       <ReviewByContainer>
         <Text variant='label'>Rated </Text>
         <RatingPill>
-          <Text>{ratingTexts[Math.floor(review.rating.$numberDecimal)]}</Text>
+          <Text>{ratingMap.get(rating)}</Text>
         </RatingPill>
         <Spacer position='right' size='medium'>
           <Text variant='label'>by </Text>
@@ -88,26 +105,108 @@ export const ReviewInfoCardItem = ({
         </Spacer>
       </SingleCardView>
 
-      {/* {isReviewed ? (
-        <Text>Reviewed</Text>
+      {isReviewed ? (
+        <>
+          <RatingButtonContainer>
+            {ratingMap.get(rating) === 'Awful' && (
+              <>
+                <RatingButtonSmallActive onPress={() => onPostReview(1)}>
+                  <Text>Awful</Text>
+                </RatingButtonSmallActive>
+
+                <RatingButton onPress={() => onPostReview(2)}>
+                  <Text>Meh</Text>
+                </RatingButton>
+
+                <RatingButton onPress={() => onPostReview(3)}>
+                  <Text>Good</Text>
+                </RatingButton>
+
+                <RatingButtonSmall2 onPress={() => onPostReview(4)}>
+                  <Text variant='small'>Awesome</Text>
+                </RatingButtonSmall2>
+              </>
+            )}
+
+            {ratingMap.get(rating) === 'Meh' && (
+              <>
+                <RatingButtonSmall onPress={() => onPostReview(1.0)}>
+                  <Text>Awful</Text>
+                </RatingButtonSmall>
+
+                <RatingButtonActive onPress={() => onPostReview(2)}>
+                  <Text>Meh</Text>
+                </RatingButtonActive>
+
+                <RatingButton onPress={() => onPostReview(3)}>
+                  <Text>Good</Text>
+                </RatingButton>
+
+                <RatingButtonSmall2 onPress={() => onPostReview(4)}>
+                  <Text variant='small'>Awesome</Text>
+                </RatingButtonSmall2>
+              </>
+            )}
+
+            {ratingMap.get(rating) === 'Good' && (
+              <>
+                <RatingButtonSmall onPress={() => onPostReview(1.0)}>
+                  <Text>Awful</Text>
+                </RatingButtonSmall>
+
+                <RatingButton onPress={() => onPostReview(2)}>
+                  <Text>Meh</Text>
+                </RatingButton>
+                <RatingButton2Active onPress={() => onPostReview(3)}>
+                  <Text>Good</Text>
+                </RatingButton2Active>
+                <RatingButtonSmall2 onPress={() => onPostReview(4)}>
+                  <Text variant='small'>Awesome</Text>
+                </RatingButtonSmall2>
+              </>
+            )}
+
+            {ratingMap.get(rating) === 'Awesome' && (
+              <>
+                <RatingButtonSmall onPress={() => onPostReview(1.0)}>
+                  <Text>Awful</Text>
+                </RatingButtonSmall>
+
+                <RatingButton onPress={() => onPostReview(2)}>
+                  <Text>Meh</Text>
+                </RatingButton>
+
+                <RatingButton onPress={() => onPostReview(3)}>
+                  <Text>Good</Text>
+                </RatingButton>
+                <RatingButtonSmall2Active onPress={() => onPostReview(4)}>
+                  <Text variant='small'>Awesome</Text>
+                </RatingButtonSmall2Active>
+              </>
+            )}
+          </RatingButtonContainer>
+        </>
       ) : (
         <>
           <RatingButtonContainer>
-            <RatingButtonSmall>
+            <RatingButtonSmall onPress={() => onPostReview(1.0)}>
               <Text>Awful</Text>
             </RatingButtonSmall>
-            <RatingButton>
+
+            <RatingButton onPress={() => onPostReview(2)}>
               <Text>Meh</Text>
             </RatingButton>
-            <RatingButton2>
+
+            <RatingButton onPress={() => onPostReview(3)}>
               <Text>Good</Text>
-            </RatingButton2>
-            <RatingButtonSmall2>
+            </RatingButton>
+
+            <RatingButtonSmall2 onPress={() => onPostReview(4)}>
               <Text variant='small'>Awesome</Text>
             </RatingButtonSmall2>
           </RatingButtonContainer>
         </>
-      )} */}
+      )}
     </>
   )
 }

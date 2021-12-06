@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from 'react'
 
-import { restaurantsRequest, restaurantsTransform, checkReviewedRequest } from './restaurants.service'
+import { restaurantsRequest, restaurantsTransform, checkReviewedRequest, postReviewRequest } from './restaurants.service'
 
 import { LocationContext } from '../location/location.context'
 
@@ -14,6 +14,7 @@ export const RestaurantsContextProvider = ({ children }) => {
   const [error, setError] = useState(null)
   const { location, keyword } = useContext(LocationContext)
   const [isReviewed, setIsReviewed] = useState(false)
+  const [reviewedItem, setReviewedItem] = useState(null)
 
   const retrieveRestaurants = (term) => {
     setIsLoading(true)
@@ -33,9 +34,26 @@ export const RestaurantsContextProvider = ({ children }) => {
     setIsLoading(true)
     checkReviewedRequest(restaurantId)
       .then((result) => {
-        console.log(result)
         setIsLoading(false)
-        //setIsReviewed(result.isReviewed)
+        setIsReviewed(result.isReviewed)
+        setReviewedItem(result.review)
+        //console.log(isReviewed)
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        setError(err)
+      })
+  }
+
+  const postReview = (review) => {
+    setIsLoading(true)
+    postReviewRequest(review)
+      .then((result) => {
+        setIsLoading(false)
+        setIsReviewed(true)
+        console.log(result)
+        retrieveRestaurants(keyword)
+        //console.log(isReviewed)
       })
       .catch((err) => {
         setIsLoading(false)
@@ -56,7 +74,9 @@ export const RestaurantsContextProvider = ({ children }) => {
         reviews,
         retrieveRestaurants,
         checkReviewed,
-        isReviewed
+        isReviewed,
+        reviewedItem,
+        postReview
       }}
     >
       {children}
