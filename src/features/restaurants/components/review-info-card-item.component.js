@@ -9,6 +9,9 @@ import {
   SingleCardView,
   ReviewByContainer,
   RatingPill,
+  RatingPill2,
+  RatingPill3,
+  RatingPill4,
   RatingButtonContainer,
   RatingButton,
   RatingButtonSmall,
@@ -22,12 +25,12 @@ import {
 import { ProfileNameListItem } from '../../social/components/user-profile.styles'
 const Loading = styled(ActivityIndicator)`
   margin-left: -25px;
-`
+`;
 const LoadingContainer = styled.View`
   position: absolute;
   top: 50%;
   left: 50%;
-`
+`;
 
 const ratingMap = new Map()
 ratingMap.set('1', 'Awful')
@@ -81,7 +84,7 @@ export const ReviewInfoCardItem = ({
             //borderColor: colors.brand.primary,
           }}
           source={{
-            uri: 'https://picsum.photos/200',
+            uri: "https://picsum.photos/200",
           }}
         />
 
@@ -90,15 +93,15 @@ export const ReviewInfoCardItem = ({
         </ProfileNameListItem>
       </ReviewByContainer>
       <SingleCardView>
-        <Spacer position='bottom' size='large'>
+        <Spacer position="bottom" size="large">
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('RestaurantDetail', {
+              navigation.navigate("RestaurantDetail", {
                 restaurant: review,
               })
             }
           >
-            <Spacer position='bottom' size='large'>
+            <Spacer position="bottom" size="large">
               <RestaurantInfoCard restaurant={review} />
             </Spacer>
           </TouchableOpacity>
@@ -208,5 +211,5 @@ export const ReviewInfoCardItem = ({
         </>
       )}
     </>
-  )
-}
+  );
+};

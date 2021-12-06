@@ -73,7 +73,7 @@ export const ProfileReviewList = styled.View`
 
 export const RatingPill = styled.TouchableOpacity`
   border-width: 1px;
-  background-color: #f8f8f8;
+  background-color: #869fb4;
   border-color: #c4c4c4;
   border-radius: 14px;
   padding: ${(props) => props.theme.space[2]};
@@ -81,6 +81,24 @@ export const RatingPill = styled.TouchableOpacity`
 `
 
 export const RatingPill2 = styled.TouchableOpacity`
+  border-width: 1px;
+  background-color: #f8f8f8;
+  border-color: #c4c4c4;
+  border-radius: 14px;
+  padding: ${(props) => props.theme.space[2]};
+  margin-right: ${(props) => props.theme.space[1]};
+`;
+
+export const RatingPill3 = styled.TouchableOpacity`
+  border-width: 1px;
+  background-color: #f9a11b;
+  border-color: #c4c4c4;
+  border-radius: 14px;
+  padding: ${(props) => props.theme.space[2]};
+  margin-right: ${(props) => props.theme.space[1]};
+`;
+
+export const RatingPill4 = styled.TouchableOpacity`
   border-width: 1px;
   background-color: #f26522;
   border-color: #c4c4c4;

@@ -8,6 +8,8 @@ import { SafeArea } from "../../../components/utility/safe-area.component";
 import {
   RatingPill,
   RatingPill2,
+  RatingPill3,
+  RatingPill4,
   ReviewByContainer,
   ReviewListItem,
 } from "../components/restaurant-info-card.styles";
@@ -18,12 +20,15 @@ import {
   UserListItem,
 } from "../../social/components/user-profile.styles";
 import { FlatList } from "react-native-gesture-handler";
+import { RestaurantInfoCardAlt } from "../components/restaurant-info-card-alternative.component";
+import { useEffect } from "react";
+import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+import { useContext } from "react";
 
 export const RestaurantDetailScreen = ({ route }) => {
-  const [breakfastExpanded, setBreakfastExpanded] = useState(false);
-  const [lunchExpanded, setLunchExpanded] = useState(false);
-  const [dinnerExpanded, setDinnerExpanded] = useState(false);
-  const [drinksExpanded, setDrinksExpanded] = useState(false);
+  const { isLoading, setViewingRestaurantId, restaurantsReviews } = useContext(
+    RestaurantsContext
+  );
 
   const users = [
     {
@@ -36,10 +41,22 @@ export const RestaurantDetailScreen = ({ route }) => {
     },
   ];
 
-  const { restaurant } = route.params;
+  useEffect(() => {
+    if (!route || !route.params || !route.params.restaurant) {
+      return;
+    }
+    setViewingRestaurantId(route.params.restaurant.restaurantId._id);
+  }, [route]);
+
+  const { restaurant, pathFrom } = route.params;
   return (
     <SafeArea>
-      <RestaurantInfoCard restaurant={restaurant} />
+      {pathFrom === "reviewUpload" ? (
+        <RestaurantInfoCardAlt restaurant={restaurant} />
+      ) : (
+        <RestaurantInfoCard restaurant={restaurant} />
+      )}
+
       {/* <ScrollView>
         <ReviewByContainer>
           <Text variant="label">Rated </Text>
@@ -65,64 +82,59 @@ export const RestaurantDetailScreen = ({ route }) => {
           <ProfileNameListItem>thso12</ProfileNameListItem>
         </ReviewByContainer>
       </ScrollView> */}
-      <FlatList
-        data={users}
-        renderItem={({ item }) => {
-          return (
-            <ReviewListItem>
-              <Text variant="label">Rated </Text>
-              <RatingPill>
-                <Text>Meh</Text>
-              </RatingPill>
-              <Spacer position="right" size="medium">
-                <Text variant="label">by </Text>
-              </Spacer>
+      {!restaurantsReviews ||
+      !restaurantsReviews.reviews ||
+      restaurantsReviews.reviews.lengh === 0 ? (
+        <></>
+      ) : (
+        <FlatList
+          data={restaurantsReviews.reviews}
+          renderItem={({ item }) => {
+            return (
+              <ReviewListItem>
+                <Text variant="label">Rated </Text>
+                {item.rating.$numberDecimal <= 1 ? (
+                  <RatingPill>
+                    <Text>Awful</Text>
+                  </RatingPill>
+                ) : item.rating.$numberDecimal <= 2 ? (
+                  <RatingPill2>
+                    <Text>Meh</Text>
+                  </RatingPill2>
+                ) : item.rating.$numberDecimal <= 3 ? (
+                  <RatingPill3>
+                    <Text>Good</Text>
+                  </RatingPill3>
+                ) : (
+                  <RatingPill4>
+                    <Text>Awesome</Text>
+                  </RatingPill4>
+                )}
 
-              <Image
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 200,
-                  borderWidth: 2,
-                  //borderColor: colors.brand.primary,
-                }}
-                source={{
-                  uri: "https://picsum.photos/200",
-                }}
-              />
+                <Spacer position="right" size="medium">
+                  <Text variant="label">by </Text>
+                </Spacer>
 
-              <ProfileNameListItem>{item.username}</ProfileNameListItem>
-            </ReviewListItem>
-          );
-        }}
-        keyExtractor={(item) => item._id}
-      />
-      <View style={{ bottom: 236 }}>
-        <ReviewListItem>
-          <Text variant="label">Rated </Text>
-          <RatingPill2>
-            <Text>Awesome</Text>
-          </RatingPill2>
-          <Spacer position="right" size="medium">
-            <Text variant="label">by </Text>
-          </Spacer>
+                <Image
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 200,
+                    borderWidth: 2,
+                    //borderColor: colors.brand.primary,
+                  }}
+                  source={{
+                    uri: "https://picsum.photos/200",
+                  }}
+                />
 
-          <Image
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 200,
-              borderWidth: 2,
-              //borderColor: colors.brand.primary,
-            }}
-            source={{
-              uri: "https://picsum.photos/200",
-            }}
-          />
-
-          <ProfileNameListItem>huong22</ProfileNameListItem>
-        </ReviewListItem>
-      </View>
+                {/* <ProfileNameListItem>{item.username}</ProfileNameListItem> */}
+              </ReviewListItem>
+            );
+          }}
+          keyExtractor={(item) => item._id}
+        />
+      )}
     </SafeArea>
   );
 };

@@ -27,6 +27,22 @@ export const getFollowingsRequest = (userId) => {
   });
 };
 
+export const followUserRequest = (userId) => {
+  //console.log("axios request");
+  const body = {
+    followingUserId: userId,
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`/profile/follow-user`, body)
+      .then((res) => resolve(res.data))
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const getReviewsRequest = (userId) => {
   //console.log("axios request");
 

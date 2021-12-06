@@ -7,7 +7,7 @@ import { RestaurantsContext } from "../../../services/restaurants/restaurants.co
 
 import { Search } from "../components/search.component";
 import { MapCallout } from "../components/map-callout.component";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 
 const Map = styled(MapView)`
   height: 100%;
@@ -16,7 +16,12 @@ const Map = styled(MapView)`
 
 export const MapScreen = ({ navigation }) => {
   const { location, userLocation } = useContext(LocationContext);
-  const { restaurants = [] } = useContext(RestaurantsContext);
+  const {
+    restaurants = [],
+    reviews: { reviews },
+    isLoading,
+    retrieveRestaurants,
+  } = useContext(RestaurantsContext);
 
   const [latDelta, setLatDelta] = useState(0);
 
@@ -30,6 +35,10 @@ export const MapScreen = ({ navigation }) => {
 
   //   setLatDelta(northeastLat - southwestLat);
   // }, [location, viewport]);
+
+  useEffect(() => {
+    retrieveRestaurants("");
+  }, []);
 
   useEffect(() => {
     if (!userLocation) {
@@ -55,35 +64,57 @@ export const MapScreen = ({ navigation }) => {
   return (
     <>
       <Search />
-      {!latitude ? (
+      {isLoading ||
+      reviews === null ||
+      reviews === undefined ||
+      reviews.length === 0 ? (
         <View></View>
       ) : (
         <Map
           region={{
-            latitude: latitude,
-            longitude: longitude,
+            latitude: parseFloat(reviews[0].restaurantId.address.latitude),
+            longitude: parseFloat(reviews[0].restaurantId.address.longitude),
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           }}
         >
-          {restaurants.map((restaurant) => {
+          {reviews.map((review) => {
             return (
               <MapView.Marker
-                key={restaurant.geometry.location.lat}
-                title={restaurant.name}
+                key={review._id}
+                title={review.restaurantId.name}
                 coordinate={{
-                  latitude: restaurant.geometry.location.lat,
-                  longitude: restaurant.geometry.location.lng,
+                  latitude: parseFloat(review.restaurantId.address.latitude),
+                  longitude: parseFloat(review.restaurantId.address.longitude),
                 }}
               >
+                <Image
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 200,
+                    borderWidth: 2,
+                    borderColor:
+                      review.rating.$numberDecimal <= 1
+                        ? "#869fb4"
+                        : review.rating.$numberDecimal <= 2
+                        ? "#f8f8f8"
+                        : review.rating.$numberDecimal <= 3
+                        ? "#f9a11b"
+                        : "#f26522",
+                  }}
+                  source={{
+                    uri: "https://picsum.photos/200",
+                  }}
+                />
                 <MapView.Callout
                   onPress={() =>
                     navigation.navigate("RestaurantDetail", {
-                      restaurant,
+                      restaurant: review,
                     })
                   }
                 >
-                  <MapCallout restaurant={restaurant} />
+                  <MapCallout restaurant={review} />
                 </MapView.Callout>
               </MapView.Marker>
             );

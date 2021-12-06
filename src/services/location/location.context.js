@@ -22,7 +22,7 @@ export const LocationContextProvider = ({ children }) => {
 
   const getLocation = () => {
     (async () => {
-      console.log("here");
+      //console.log("here");
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         console.log("permission denied");
@@ -30,13 +30,13 @@ export const LocationContextProvider = ({ children }) => {
 
       Location.setGoogleApiKey(apiKey);
 
-      console.log(status);
+      //console.log(status);
 
       let { coords } = await Location.getCurrentPositionAsync();
 
       setUserLocation(coords);
 
-      console.log(coords);
+      //console.log(coords);
 
       if (coords) {
         let { longitude, latitude } = coords;
@@ -46,8 +46,8 @@ export const LocationContextProvider = ({ children }) => {
           latitude,
         });
         setAddress(regionName[0]);
-        console.log(address);
-        console.log(regionName, "nothing");
+        //console.log(address);
+        //console.log(regionName, "nothing");
       }
 
       // console.log();

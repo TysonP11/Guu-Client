@@ -22,6 +22,8 @@ import {
 import { Button } from "react-native-paper";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
+import { FollowListUser } from "../screens/user-follow-list.screen";
+import { followUserRequest } from "../../../services/profile/user-profile.service";
 
 export const UserProfileTop = ({
   user,
@@ -34,15 +36,22 @@ export const UserProfileTop = ({
   loggedInUser,
   isFollowing,
   isOwnProfile,
+  followUser,
 }) => {
+  const [reload, setReload] = useState(1);
+
+  //console.log(user);
+
   const ratingArray = Array.from(new Array(Math.floor(averageRating)));
 
   return !user ||
     !following ||
     !followers ||
-    !averageRating ||
-    !tags ||
-    isOwnProfile === undefined ? (
+    isOwnProfile === undefined ||
+    reviews === undefined ||
+    tags === null ||
+    tags === undefined ||
+    reviews === null ? (
     <></>
   ) : (
     <ProfileTop>
@@ -59,18 +68,22 @@ export const UserProfileTop = ({
           source={require("../../../../assets/Bobby.jpeg")}
         />
         <OverallReviewsInfo>
-          <ReviewsInfo>
-            <Text>{averageRating} </Text>
-            {ratingArray.map((_, i) => (
-              <SvgXml
-                key={`star-${reviews[0].restaurantId.placeId}-${i}`}
-                xml={star}
-                width={20}
-                height={20}
-              />
-            ))}
-            <Text> {reviews.length} Guu reviews</Text>
-          </ReviewsInfo>
+          {reviews.length === 0 ? (
+            <Text variant="caption">Wow, such empty</Text>
+          ) : (
+            <ReviewsInfo>
+              <Text>{averageRating} </Text>
+              {ratingArray.map((_, i) => (
+                <SvgXml
+                  key={`star-${reviews[0].restaurantId.placeId}-${i}`}
+                  xml={star}
+                  width={20}
+                  height={20}
+                />
+              ))}
+              <Text> {reviews.length} Guu reviews</Text>
+            </ReviewsInfo>
+          )}
 
           <TagsContainer>
             {tags.map((t, i) => (
@@ -110,17 +123,31 @@ export const UserProfileTop = ({
         </ProfileFollowDetail>
         <ProfileFollowDetail>
           {isOwnProfile ? (
-            <FollowButton>
+            <FollowButton
+              onPress={() => {
+                navigation.navigate("Upload Review");
+              }}
+            >
               <ButtonText>Add Review</ButtonText>
             </FollowButton>
           ) : (
             <>
               {isFollowing ? (
-                <UnfollowButton>
+                <UnfollowButton
+                  onPress={() => {
+                    console.log("unfollow pressed");
+                    followUser(user._id.toString());
+                  }}
+                >
                   <UnfollowButtonText>Unfollow</UnfollowButtonText>
                 </UnfollowButton>
               ) : (
-                <FollowButton>
+                <FollowButton
+                  onPress={() => {
+                    console.log("follow pressed");
+                    followUser(user._id.toString());
+                  }}
+                >
                   <ButtonText>Follow</ButtonText>
                 </FollowButton>
               )}

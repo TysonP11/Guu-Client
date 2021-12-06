@@ -18,8 +18,18 @@ import { MapScreen } from "../../map/screens/map.screen";
 import {
   ProfileReviewList,
   RatingPill,
+  RatingPill2,
+  RatingPill3,
+  RatingPill4,
   ReviewByContainer,
 } from "../../restaurants/components/restaurant-info-card.styles";
+import MapView from "react-native-maps";
+import { MapCallout } from "../../map/components/map-callout.component";
+
+const Map = styled(MapView)`
+  height: 100%;
+  width: 100%;
+`;
 
 const RestaurantList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -76,11 +86,23 @@ export const UserProfileFeed = ({
                 <Spacer position="right" size="large">
                   <ProfileReviewList>
                     <Text variant="label">Rated </Text>
-                    <RatingPill>
-                      <Text>
-                        {ratingTexts[Math.floor(item.rating.$numberDecimal)]}
-                      </Text>
-                    </RatingPill>
+                    {item.rating.$numberDecimal <= 1 ? (
+                      <RatingPill>
+                        <Text>Awful</Text>
+                      </RatingPill>
+                    ) : item.rating.$numberDecimal <= 2 ? (
+                      <RatingPill2>
+                        <Text>Meh</Text>
+                      </RatingPill2>
+                    ) : item.rating.$numberDecimal <= 3 ? (
+                      <RatingPill3>
+                        <Text>Good</Text>
+                      </RatingPill3>
+                    ) : (
+                      <RatingPill4>
+                        <Text>Awesome</Text>
+                      </RatingPill4>
+                    )}
                   </ProfileReviewList>
                   <RestaurantInfoCard restaurant={item} />
                 </Spacer>
@@ -90,7 +112,60 @@ export const UserProfileFeed = ({
           keyExtractor={(item) => item._id}
         />
       ) : (
-        <View></View>
+        <View style={{ height: 450 }}>
+          <Map
+            region={{
+              latitude: parseFloat(reviews[0].restaurantId.address.latitude),
+              longitude: parseFloat(reviews[0].restaurantId.address.longitude),
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+            }}
+          >
+            {reviews.map((review) => {
+              return (
+                <MapView.Marker
+                  key={review._id}
+                  title={review.restaurantId.name}
+                  coordinate={{
+                    latitude: parseFloat(review.restaurantId.address.latitude),
+                    longitude: parseFloat(
+                      review.restaurantId.address.longitude
+                    ),
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 200,
+                      borderWidth: 2,
+                      borderColor:
+                        review.rating.$numberDecimal <= 1
+                          ? "#869fb4"
+                          : review.rating.$numberDecimal <= 2
+                          ? "#f8f8f8"
+                          : review.rating.$numberDecimal <= 3
+                          ? "#f9a11b"
+                          : "#f26522",
+                    }}
+                    source={{
+                      uri: "https://picsum.photos/200",
+                    }}
+                  />
+                  <MapView.Callout
+                    onPress={() =>
+                      navigation.navigate("RestaurantDetail", {
+                        restaurant: review,
+                      })
+                    }
+                  >
+                    <MapCallout restaurant={review} />
+                  </MapView.Callout>
+                </MapView.Marker>
+              );
+            })}
+          </Map>
+        </View>
       )}
     </ProfileFeed>
   );

@@ -30,6 +30,20 @@ export const checkReviewedRequest = (restaurantId) => {
   });
 };
 
+export const restaurantsForNewReviewRequest = (term) => {
+  return new Promise((resolve, reject) => {
+    const body = { term };
+    axios
+      .post(`/restaurant/search-restaurants`, body)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const postReviewRequest = (review) => {
   return new Promise((resolve, reject) => {
     
@@ -39,6 +53,20 @@ export const postReviewRequest = (review) => {
 
     axios
       .post(`/review/post-review`, review)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+  });
+};
+
+export const reviewsByRestaurantRequest = (restaurantId) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/review/get-reviews-by-res?restaurantId=${restaurantId}`)
       .then((res) => {
         resolve(res.data);
       })

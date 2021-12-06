@@ -29,7 +29,7 @@ export const RestaurantsScreen = ({ navigation }) => {
     retrieveRestaurants,
     checkReviewed,
     isReviewed,
-    postReview
+    postReview,
   } = useContext(RestaurantsContext)
   const { favourites } = useContext(FavouritesContext)
   const [isToggled, setIsToggled] = useState(false)
@@ -53,54 +53,41 @@ export const RestaurantsScreen = ({ navigation }) => {
     retrieveRestaurants('')
   }, [])
 
-  return isLoading || !reviews || reviews.length === 0 ? (
-    <LoadingContainer>
-      <Loading size={50} animating={true} color={Colors.blue300} />
-    </LoadingContainer>
-  ) : (
+  return (
     <SafeArea>
-      <Search
-        isFavouritesToggled={isToggled}
-        onFavouritesToggle={() => setIsToggled(!isToggled)}
-      />
-      {/* {isToggled && (
-        <FavouritesBar
-          favourites={favourites}
-          onNavigate={navigation.navigate}
-        />
+      {isLoading ||
+      reviews === null ||
+      reviews === undefined ||
+      reviews.length === 0 ? (
+        <LoadingContainer>
+          <Loading size={50} animating={true} color={Colors.blue300} />
+        </LoadingContainer>
+      ) : (
+        <>
+          <Search
+            isFavouritesToggled={isToggled}
+            onFavouritesToggle={() => setIsToggled(!isToggled)}
+          />
+          <ReviewInfoCardItem
+            review={reviews[reviewIndex - 1]}
+            navigation={navigation}
+            isReviewed={isReviewed}
+            postReview={postReview}
+            rating={
+              reviews.length > 0 &&
+              reviews[reviewIndex - 1] &&
+              Math.floor(
+                reviews[reviewIndex - 1].rating.$numberDecimal
+              ).toString()
+            }
+          />
+          <OtherOptionsContainer>
+            <OtherOptions onPress={() => switchReview(reviews.length)}>
+              <Text>Not Interested</Text>
+            </OtherOptions>
+          </OtherOptionsContainer>
+        </>
       )}
-      <RestaurantList
-        data={restaurants}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("RestaurantDetail", {
-                  restaurant: item,
-                })
-              }
-            >
-              <Spacer position="bottom" size="large">
-                <RestaurantInfoCard restaurant={item} />
-              </Spacer>
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item) => item.name}
-      /> */}
-      <Text variant='label'>{reviewIndex}</Text>
-      <ReviewInfoCardItem
-        review={reviews[reviewIndex - 1]}
-        navigation={navigation}
-        isReviewed={isReviewed}
-        postReview={postReview}
-        rating={reviews.length > 0 && reviews[reviewIndex - 1] && Math.floor(reviews[reviewIndex - 1].rating.$numberDecimal).toString()}
-      />
-      <OtherOptionsContainer>
-        <OtherOptions onPress={() => switchReview(reviews.length)}>
-          <Text>Not Interested</Text>
-        </OtherOptions>
-      </OtherOptionsContainer>
     </SafeArea>
   )
 }

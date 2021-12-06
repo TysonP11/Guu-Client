@@ -20,7 +20,11 @@ export const SocialNavigator = () => {
         ...TransitionPresets.ModalPresentationIOS,
       }}
     >
-      <SocialStack.Screen name="My Profile" component={MyProfileScreen} />
+      <SocialStack.Screen
+        name="Profile"
+        component={MyProfileScreen}
+        header={null}
+      />
       <SocialStack.Screen
         name="RestaurantDetail"
         component={RestaurantDetailScreen}
